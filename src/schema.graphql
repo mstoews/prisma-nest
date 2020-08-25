@@ -1,0 +1,130 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Post {
+  id: ID!
+  createdAt: Date!
+  updatedAt: Date!
+  title: String!
+  content: String!
+  published: Boolean!
+  author: User!
+}
+
+"""Date custom scalar type"""
+scalar Date
+
+type User {
+  id: ID!
+  createdAt: Date!
+  updatedAt: Date!
+  email: String!
+  firstname: String
+  lastname: String
+  role: Role!
+  posts: [Post!]!
+}
+
+"""User role"""
+enum Role {
+  ADMIN
+  USER
+}
+
+type Token {
+  """JWT access token"""
+  accessToken: String!
+
+  """JWT refresh token"""
+  refreshToken: String!
+}
+
+type Auth {
+  """JWT access token"""
+  accessToken: String!
+
+  """JWT refresh token"""
+  refreshToken: String!
+  user: User!
+}
+
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
+
+type PostEdge {
+  cursor: String!
+  node: Post!
+}
+
+type PostConnection {
+  edges: [PostEdge!]
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type Query {
+  me: User!
+  publishedPosts(orderBy: PostOrder, query: String, skip: Int, first: Int, last: Int, after: String, before: String): PostConnection!
+  userPosts(userId: String!): [Post!]!
+  post(postId: String!): Post!
+  helloWorld: String!
+  hello(name: String!): String!
+}
+
+input PostOrder {
+  direction: OrderDirection!
+  field: PostOrderField!
+}
+
+"""
+Possible directions in which to order a list of items when provided an `orderBy` argument.
+"""
+enum OrderDirection {
+  asc
+  desc
+}
+
+"""Properties by which post connections can be ordered."""
+enum PostOrderField {
+  id
+  createdAt
+  updatedAt
+  published
+  title
+  content
+}
+
+type Mutation {
+  signup(data: SignupInput!): Auth!
+  login(data: LoginInput!): Auth!
+  refreshToken(token: String!): Token!
+  updateUser(data: UpdateUserInput!): User!
+  changePassword(data: ChangePasswordInput!): User!
+}
+
+input SignupInput {
+  email: String!
+  password: String!
+  firstname: String
+  lastname: String
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input UpdateUserInput {
+  firstname: String
+  lastname: String
+}
+
+input ChangePasswordInput {
+  oldPassword: String!
+  newPassword: String!
+}
